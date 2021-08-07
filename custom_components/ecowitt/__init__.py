@@ -3,58 +3,50 @@ import asyncio
 import logging
 import time
 
-from pyecowitt import (
-    EcoWittListener,
-    WINDCHILL_OLD,
-    WINDCHILL_NEW,
-    WINDCHILL_HYBRID,
-)
-
-from homeassistant.config_entries import SOURCE_IMPORT, ConfigEntry
-from homeassistant.core import HomeAssistant, callback
-from homeassistant.helpers.dispatcher import (
-    async_dispatcher_connect,
-    async_dispatcher_send,
-)
+from homeassistant.config_entries import ConfigEntry
+from homeassistant.config_entries import SOURCE_IMPORT
+from homeassistant.const import CONF_PORT
+from homeassistant.const import CONF_UNIT_SYSTEM_IMPERIAL
+from homeassistant.const import CONF_UNIT_SYSTEM_METRIC
+from homeassistant.core import callback
+from homeassistant.core import HomeAssistant
+from homeassistant.helpers.dispatcher import async_dispatcher_connect
+from homeassistant.helpers.dispatcher import async_dispatcher_send
 from homeassistant.helpers.entity import Entity
+from pyecowitt import EcoWittListener
+from pyecowitt import WINDCHILL_HYBRID
+from pyecowitt import WINDCHILL_NEW
+from pyecowitt import WINDCHILL_OLD
 
-from homeassistant.const import (
-    CONF_PORT,
-    CONF_UNIT_SYSTEM_METRIC,
-    CONF_UNIT_SYSTEM_IMPERIAL,
-)
-
-from .const import (
-    CONF_UNIT_BARO,
-    CONF_UNIT_WIND,
-    CONF_UNIT_RAIN,
-    CONF_UNIT_WINDCHILL,
-    CONF_UNIT_LIGHTNING,
-    CONF_UNIT_SYSTEM_METRIC_MS,
-    CONF_NAME,
-    DOMAIN,
-    DATA_ECOWITT,
-    DATA_STATION,
-    DATA_PASSKEY,
-    DATA_STATIONTYPE,
-    DATA_FREQ,
-    DATA_MODEL,
-    DATA_READY,
-    DATA_OPTIONS,
-    ECOWITT_PLATFORMS,
-    IGNORED_SENSORS,
-    S_IMPERIAL,
-    S_METRIC,
-    S_METRIC_MS,
-    SENSOR_TYPES,
-    TYPE_SENSOR,
-    TYPE_BINARY_SENSOR,
-    W_TYPE_NEW,
-    W_TYPE_OLD,
-    W_TYPE_HYBRID,
-    REG_ENTITIES,
-    SIGNAL_ADD_ENTITIES,
-)
+from .const import CONF_NAME
+from .const import CONF_UNIT_BARO
+from .const import CONF_UNIT_LIGHTNING
+from .const import CONF_UNIT_RAIN
+from .const import CONF_UNIT_SYSTEM_METRIC_MS
+from .const import CONF_UNIT_WIND
+from .const import CONF_UNIT_WINDCHILL
+from .const import DATA_ECOWITT
+from .const import DATA_FREQ
+from .const import DATA_MODEL
+from .const import DATA_OPTIONS
+from .const import DATA_PASSKEY
+from .const import DATA_READY
+from .const import DATA_STATION
+from .const import DATA_STATIONTYPE
+from .const import DOMAIN
+from .const import ECOWITT_PLATFORMS
+from .const import IGNORED_SENSORS
+from .const import REG_ENTITIES
+from .const import S_IMPERIAL
+from .const import S_METRIC
+from .const import S_METRIC_MS
+from .const import SENSOR_TYPES
+from .const import SIGNAL_ADD_ENTITIES
+from .const import TYPE_BINARY_SENSOR
+from .const import TYPE_SENSOR
+from .const import W_TYPE_HYBRID
+from .const import W_TYPE_NEW
+from .const import W_TYPE_OLD
 
 NOTIFICATION_ID = DOMAIN
 NOTIFICATION_TITLE = "Ecowitt config migrated"
@@ -114,10 +106,12 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
         hass.data.setdefault(DOMAIN, {})
 
     # if options existed in the YAML but not in the config entry, add
-    if (not entry.options
-            and entry.source == SOURCE_IMPORT
-            and hass.data.get(DOMAIN)
-            and hass.data[DOMAIN].get(DATA_OPTIONS)):
+    if (
+        not entry.options
+        and entry.source == SOURCE_IMPORT
+        and hass.data.get(DOMAIN)
+        and hass.data[DOMAIN].get(DATA_OPTIONS)
+    ):
         hass.config_entries.async_update_entry(
             entry=entry,
             options=hass.data[DOMAIN][DATA_OPTIONS],
@@ -161,7 +155,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
     hass.loop.create_task(ws.listen())
 
     async def close_server(*args):
-        """ Close the ecowitt server."""
+        """Close the ecowitt server."""
         await ws.stop()
 
     def check_imp_metric_sensor(sensor):
@@ -171,34 +165,52 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
         if metric == 0:
             return True
         if "baro" in sensor:
-            if (entry.options[CONF_UNIT_BARO] == CONF_UNIT_SYSTEM_IMPERIAL
-                    and metric == S_METRIC):
+            if (
+                entry.options[CONF_UNIT_BARO] == CONF_UNIT_SYSTEM_IMPERIAL
+                and metric == S_METRIC
+            ):
                 return False
-            if (entry.options[CONF_UNIT_BARO] == CONF_UNIT_SYSTEM_METRIC
-                    and metric == S_IMPERIAL):
+            if (
+                entry.options[CONF_UNIT_BARO] == CONF_UNIT_SYSTEM_METRIC
+                and metric == S_IMPERIAL
+            ):
                 return False
         if "rain" in sensor:
-            if (entry.options[CONF_UNIT_RAIN] == CONF_UNIT_SYSTEM_IMPERIAL
-                    and metric == S_METRIC):
+            if (
+                entry.options[CONF_UNIT_RAIN] == CONF_UNIT_SYSTEM_IMPERIAL
+                and metric == S_METRIC
+            ):
                 return False
-            if (entry.options[CONF_UNIT_RAIN] == CONF_UNIT_SYSTEM_METRIC
-                    and metric == S_IMPERIAL):
+            if (
+                entry.options[CONF_UNIT_RAIN] == CONF_UNIT_SYSTEM_METRIC
+                and metric == S_IMPERIAL
+            ):
                 return False
         if "windchill" not in sensor and ("wind" in sensor or "gust" in sensor):
-            if (entry.options[CONF_UNIT_WIND] == CONF_UNIT_SYSTEM_IMPERIAL
-                    and metric != S_IMPERIAL):
+            if (
+                entry.options[CONF_UNIT_WIND] == CONF_UNIT_SYSTEM_IMPERIAL
+                and metric != S_IMPERIAL
+            ):
                 return False
-            if (entry.options[CONF_UNIT_WIND] == CONF_UNIT_SYSTEM_METRIC
-                    and metric != S_METRIC):
+            if (
+                entry.options[CONF_UNIT_WIND] == CONF_UNIT_SYSTEM_METRIC
+                and metric != S_METRIC
+            ):
                 return False
-            if (entry.options[CONF_UNIT_WIND] == CONF_UNIT_SYSTEM_METRIC_MS
-                    and metric != S_METRIC_MS):
+            if (
+                entry.options[CONF_UNIT_WIND] == CONF_UNIT_SYSTEM_METRIC_MS
+                and metric != S_METRIC_MS
+            ):
                 return False
-        if (sensor == 'lightning'
-                and entry.options[CONF_UNIT_LIGHTNING] == CONF_UNIT_SYSTEM_IMPERIAL):
+        if (
+            sensor == "lightning"
+            and entry.options[CONF_UNIT_LIGHTNING] == CONF_UNIT_SYSTEM_IMPERIAL
+        ):
             return False
-        if (sensor == 'lightning_mi'
-                and entry.options[CONF_UNIT_LIGHTNING] == CONF_UNIT_SYSTEM_METRIC):
+        if (
+            sensor == "lightning_mi"
+            and entry.options[CONF_UNIT_LIGHTNING] == CONF_UNIT_SYSTEM_METRIC
+        ):
             return False
         return True
 
@@ -240,8 +252,10 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
         for sensor in ws.last_values.keys():
             check_and_append_sensor(sensor)
 
-        if (not ecowitt_data[REG_ENTITIES][TYPE_SENSOR]
-                and not ecowitt_data[REG_ENTITIES][TYPE_BINARY_SENSOR]):
+        if (
+            not ecowitt_data[REG_ENTITIES][TYPE_SENSOR]
+            and not ecowitt_data[REG_ENTITIES][TYPE_BINARY_SENSOR]
+        ):
             _LOGGER.error("No sensors found to monitor, check device config.")
             return False
 
@@ -266,14 +280,22 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
         for sensor in weather_data.keys():
             if sensor not in SENSOR_TYPES:
                 if sensor not in IGNORED_SENSORS:
-                    _LOGGER.warning("Unhandled sensor type %s value %s, "
-                                    + "file a PR.", sensor, weather_data[sensor])
-            elif (sensor not in ecowitt_data[REG_ENTITIES][TYPE_SENSOR]
-                  and sensor not in ecowitt_data[REG_ENTITIES][TYPE_BINARY_SENSOR]
-                  and sensor not in IGNORED_SENSORS
-                  and check_imp_metric_sensor(sensor)):
-                _LOGGER.warning("Unregistered sensor type %s value %s received.",
-                                sensor, weather_data[sensor])
+                    _LOGGER.warning(
+                        "Unhandled sensor type %s value %s, " + "file a PR.",
+                        sensor,
+                        weather_data[sensor],
+                    )
+            elif (
+                sensor not in ecowitt_data[REG_ENTITIES][TYPE_SENSOR]
+                and sensor not in ecowitt_data[REG_ENTITIES][TYPE_BINARY_SENSOR]
+                and sensor not in IGNORED_SENSORS
+                and check_imp_metric_sensor(sensor)
+            ):
+                _LOGGER.warning(
+                    "Unregistered sensor type %s value %s received.",
+                    sensor,
+                    weather_data[sensor],
+                )
                 # try to register the sensor
                 kind = check_and_append_sensor(sensor)
                 if kind is not None:
@@ -310,9 +332,9 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry):
     return unload_ok
 
 
-def async_add_ecowitt_entities(hass, entry, entity_type,
-                               platform, async_add_entities,
-                               discovery_info):
+def async_add_ecowitt_entities(
+    hass, entry, entity_type, platform, async_add_entities, discovery_info
+):
     entities = []
     if discovery_info is None:
         return
@@ -321,8 +343,9 @@ def async_add_ecowitt_entities(hass, entry, entity_type,
         if new_entity not in hass.data[DOMAIN][entry.entry_id][REG_ENTITIES][platform]:
             hass.data[DOMAIN][entry.entry_id][REG_ENTITIES][platform].append(new_entity)
         name, uom, kind, device_class, icon, metric = SENSOR_TYPES[new_entity]
-        entities.append(entity_type(hass, entry, new_entity, name,
-                                    device_class, uom, icon))
+        entities.append(
+            entity_type(hass, entry, new_entity, name, device_class, uom, icon)
+        )
     if entities:
         async_add_entities(entities, True)
 
@@ -357,8 +380,10 @@ class EcowittEntity(Entity):
     @property
     def device_info(self):
         """Return device information for this sensor."""
-        if (self._entry.data[CONF_NAME] != ''
-                and self._entry.data[CONF_NAME] is not None):
+        if (
+            self._entry.data[CONF_NAME] != ""
+            and self._entry.data[CONF_NAME] is not None
+        ):
             dname = self._entry.data[CONF_NAME]
         else:
             dname = DOMAIN

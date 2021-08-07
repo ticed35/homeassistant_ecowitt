@@ -2,28 +2,24 @@
 import logging
 
 import voluptuous as vol
-from homeassistant import config_entries, core, exceptions
+from homeassistant import config_entries
+from homeassistant import core
+from homeassistant import exceptions
+from homeassistant.const import CONF_PORT
+from homeassistant.const import CONF_UNIT_SYSTEM_IMPERIAL
+from homeassistant.const import CONF_UNIT_SYSTEM_METRIC
 from homeassistant.core import callback
 
-from homeassistant.const import (
-    CONF_PORT,
-    CONF_UNIT_SYSTEM_METRIC,
-    CONF_UNIT_SYSTEM_IMPERIAL,
-)
-
-from .const import (
-    CONF_UNIT_BARO,
-    CONF_UNIT_WIND,
-    CONF_UNIT_RAIN,
-    CONF_UNIT_WINDCHILL,
-    CONF_UNIT_LIGHTNING,
-    DOMAIN,
-    W_TYPE_HYBRID,
-    UNIT_OPTS,
-    WIND_OPTS,
-    WINDCHILL_OPTS
-)
-
+from .const import CONF_UNIT_BARO
+from .const import CONF_UNIT_LIGHTNING
+from .const import CONF_UNIT_RAIN
+from .const import CONF_UNIT_WIND
+from .const import CONF_UNIT_WINDCHILL
+from .const import DOMAIN
+from .const import UNIT_OPTS
+from .const import W_TYPE_HYBRID
+from .const import WIND_OPTS
+from .const import WINDCHILL_OPTS
 from .schemas import (
     DATA_SCHEMA,
 )
@@ -55,8 +51,7 @@ class EcowittConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
         port = device_config[CONF_PORT]
         return self.async_create_entry(
-            title=f"Ecowitt on port {port}",
-            data=device_config
+            title=f"Ecowitt on port {port}", data=device_config
         )
 
     async def async_step_user(self, user_input=None):
@@ -72,8 +67,7 @@ class EcowittConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         if user_input is not None:
             try:
                 info = await validate_input(self.hass, user_input)
-                return self.async_create_entry(title=info["title"],
-                                               data=user_input)
+                return self.async_create_entry(title=info["title"], data=user_input)
             except AlreadyConfigured:
                 return self.async_abort(reason="already_configured")
 
@@ -108,31 +102,36 @@ class EcowittOptionsFlowHandler(config_entries.OptionsFlow):
                 vol.Optional(
                     CONF_UNIT_BARO,
                     default=self.config_entry.options.get(
-                        CONF_UNIT_BARO, CONF_UNIT_SYSTEM_METRIC,
+                        CONF_UNIT_BARO,
+                        CONF_UNIT_SYSTEM_METRIC,
                     ),
                 ): vol.In(UNIT_OPTS),
                 vol.Optional(
                     CONF_UNIT_WIND,
                     default=self.config_entry.options.get(
-                        CONF_UNIT_WIND, CONF_UNIT_SYSTEM_IMPERIAL,
+                        CONF_UNIT_WIND,
+                        CONF_UNIT_SYSTEM_IMPERIAL,
                     ),
                 ): vol.In(WIND_OPTS),
                 vol.Optional(
                     CONF_UNIT_RAIN,
                     default=self.config_entry.options.get(
-                        CONF_UNIT_RAIN, CONF_UNIT_SYSTEM_IMPERIAL,
+                        CONF_UNIT_RAIN,
+                        CONF_UNIT_SYSTEM_IMPERIAL,
                     ),
                 ): vol.In(UNIT_OPTS),
                 vol.Optional(
                     CONF_UNIT_LIGHTNING,
                     default=self.config_entry.options.get(
-                        CONF_UNIT_LIGHTNING, CONF_UNIT_SYSTEM_IMPERIAL,
+                        CONF_UNIT_LIGHTNING,
+                        CONF_UNIT_SYSTEM_IMPERIAL,
                     ),
                 ): vol.In(UNIT_OPTS),
                 vol.Optional(
                     CONF_UNIT_WINDCHILL,
                     default=self.config_entry.options.get(
-                        CONF_UNIT_WINDCHILL, W_TYPE_HYBRID,
+                        CONF_UNIT_WINDCHILL,
+                        W_TYPE_HYBRID,
                     ),
                 ): vol.In(WINDCHILL_OPTS),
             }

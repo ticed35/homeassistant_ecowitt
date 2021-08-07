@@ -1,6 +1,7 @@
 [![hacs_badge](https://img.shields.io/badge/HACS-Default-orange.svg)](https://github.com/custom-components/hacs)
 
 # Ecowitt Weather Station integration for home-assistant
+
 Ecowitt driver for homeassistant
 
 ![Bling](https://raw.githubusercontent.com/garbled1/homeassistant_ecowitt/master/md.images/overview.png)
@@ -24,11 +25,11 @@ You must select the port when enabling, see below section on "How to set up".
 There are a few options available once the integration is setup, these are
 available in the "options" dialog in the integrations box for the component.
 
-* Barometer Unit (default metric)
-* Wind Unit (default imperial)
-* Rainfall Unit (default imperial)
-* Lightning Unit (default imperial)
-* Windchill Unit (default hybrid)
+- Barometer Unit (default metric)
+- Wind Unit (default imperial)
+- Rainfall Unit (default imperial)
+- Lightning Unit (default imperial)
+- Windchill Unit (default hybrid)
 
 Windchill can be one of "hybrid", "old", or "new".
 Defaults for units are as shown above.
@@ -36,7 +37,7 @@ Units can be one of "metric" or "imperial".
 
 Note that if you change the units, it will create a new sensor for the
 different unit.
-For example, if you had wind set to imperial, "sensor.wind_speed" 
+For example, if you had wind set to imperial, "sensor.wind_speed"
 would have been your data entity, but switching to metric will create a
 "sensor.wind_speed_2".
 You will see in the entities page the original "sensor.wind_speed" will be
@@ -44,7 +45,6 @@ marked with a status of "Restored".
 You can safely delete the old sensor once you validate you are seeing data
 on the new one.
 Be sure to update any automations/etc that reference the old sensor.
-
 
 ### Breaking changes
 
@@ -58,14 +58,14 @@ Additionally in 0.5, the battery sensors have been significantly changed.
 Previously all batteries were simple floats with the raw value displayed.
 There are 3 types of batteries that the ecowitt displays data for:
 
-* Simple good/bad batteries.  These are now binary sensors.  This will leave
-  A dead entry in your entities for the old battery sensor.  You may safely
+- Simple good/bad batteries. These are now binary sensors. This will leave
+  A dead entry in your entities for the old battery sensor. You may safely
   delete that entity.
-* Voltage readings.  A few batteries display a voltage (soil, WH80).
+- Voltage readings. A few batteries display a voltage (soil, WH80).
   A soil battery is normally 1.5v, so a good alarm might be around 1.3?
   WH80 batteries seem to be about 2.38 - 2.4, so maybe in the 2.3 to 2.2 range
   for an alarm?
-* Other batteries will now show as a percentage.
+- Other batteries will now show as a percentage.
   The raw sensor gives a number from 0-5, this is simply multiplied by 20
   to give a percentage of 0-100.
 
@@ -79,7 +79,6 @@ You may delete these.
 Once your configuration has been moved, you should delete the old ecowitt
 section from your configuration.yaml file and restart hass.
 
-
 ## How to set up:
 
 Use the WS View app (on your phone) for your Ecowitt device, and connect to it.
@@ -88,8 +87,8 @@ Use the WS View app (on your phone) for your Ecowitt device, and connect to it.
 1. Hit next repeatedly to move to the last screen titled "Customized"
 1. Pick the protocol Ecowitt, and put in the ip/hostname of your hass server.
 1. Path doesn't matter as long as it ends in /, leave the default, or change it to
-	just /.
-1. Pick a port that is not in use on the server (netstat -lt). 
+   just /.
+1. Pick a port that is not in use on the server (netstat -lt).
    (4199 is probably a good default)
 1. Pick a reasonable value for updates, like 60 seconds.
 1. Save configuration.
@@ -101,7 +100,7 @@ You will need to supply a port, and an optional name for the station (if you hav
 multiple stations this might be useful)
 Pick the same port you did in the wsview app.
 
-One note:  You may wish to setup the integration, and change the options for
+One note: You may wish to setup the integration, and change the options for
 the various units prior to setting up the physical device.
 This will prevent creation of any entities for the wrong measurement unit from
 being created if you decide to change one to a non-default.
@@ -117,7 +116,6 @@ This can also be caused by a sensor that has a low battery.
 If you know this sensor is just badly placed, you can ignore these, but if you
 start seeing them for previously reliable sensors, check the batteries.
 
-
 ## Delay on startup
 
 Older versions of this component would cause homeassistant to freeze on startup
@@ -126,7 +124,6 @@ This is no longer the case.
 Sensors will now show up as restored until the first data packet is recieved
 from the ecowitt.
 There should be no delay on startup at all.
-
 
 ## A note on leak sensors
 
@@ -138,7 +135,6 @@ If you rely upon a leak sensor for something vital, I suggest testing your
 automation, by disconnecting the battery from the sensor, and validating
 your code does something sane.
 
-
 ## I want a pretty card for my weather
 
 I highly reccomend https://github.com/r-renato/ha-card-weather-conditions
@@ -148,7 +144,7 @@ forcast data from external sources for sensors you don't have
 (like pollen counts, for example).
 
 This is a copy of my setup.
-Sensors named with the sensor.cc_ are from the climacell external source,
+Sensors named with the sensor.cc\_ are from the climacell external source,
 other sensors are my local weatherstation.
 
 ```

@@ -1,17 +1,19 @@
 """Support for Ecowitt Weather Stations."""
 import logging
 
-from . import EcowittEntity, async_add_ecowitt_entities
-from .const import (
-    DOMAIN,
-    TYPE_BINARY_SENSOR,
-    REG_ENTITIES,
-    SIGNAL_ADD_ENTITIES,
-)
 from homeassistant.components.binary_sensor import BinarySensorEntity
 from homeassistant.components.binary_sensor import DOMAIN as BINARY_SENSOR_DOMAIN
+from homeassistant.const import STATE_OFF
+from homeassistant.const import STATE_ON
+from homeassistant.const import STATE_UNKNOWN
 from homeassistant.helpers.dispatcher import async_dispatcher_connect
-from homeassistant.const import STATE_OFF, STATE_ON, STATE_UNKNOWN
+
+from . import async_add_ecowitt_entities
+from . import EcowittEntity
+from .const import DOMAIN
+from .const import REG_ENTITIES
+from .const import SIGNAL_ADD_ENTITIES
+from .const import TYPE_BINARY_SENSOR
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -20,9 +22,14 @@ async def async_setup_entry(hass, entry, async_add_entities):
     """Add sensors if new."""
 
     def add_entities(discovery_info=None):
-        async_add_ecowitt_entities(hass, entry, EcowittBinarySensor,
-                                   BINARY_SENSOR_DOMAIN, async_add_entities,
-                                   discovery_info)
+        async_add_ecowitt_entities(
+            hass,
+            entry,
+            EcowittBinarySensor,
+            BINARY_SENSOR_DOMAIN,
+            async_add_entities,
+            discovery_info,
+        )
 
     signal = f"{SIGNAL_ADD_ENTITIES}_{BINARY_SENSOR_DOMAIN}"
     async_dispatcher_connect(hass, signal, add_entities)
@@ -30,7 +37,6 @@ async def async_setup_entry(hass, entry, async_add_entities):
 
 
 class EcowittBinarySensor(EcowittEntity, BinarySensorEntity):
-
     def __init__(self, hass, entry, key, name, dc, uom, icon):
         """Initialize the sensor."""
         super().__init__(hass, entry, key, name)
@@ -45,8 +51,9 @@ class EcowittBinarySensor(EcowittEntity, BinarySensorEntity):
             if self._ws.last_values[self._key] > 0:
                 return True
         else:
-            _LOGGER.warning("Sensor %s not in last update, check range or battery",
-                            self._key)
+            _LOGGER.warning(
+                "Sensor %s not in last update, check range or battery", self._key
+            )
             return None
         return False
 

@@ -1,23 +1,20 @@
 """Support for Ecowitt Weather Stations."""
 import logging
+
 import homeassistant.util.dt as dt_util
-
-from . import EcowittEntity, async_add_ecowitt_entities
 from homeassistant.components.sensor import DOMAIN as SENSOR_DOMAIN
+from homeassistant.const import DEVICE_CLASS_BATTERY
+from homeassistant.const import DEVICE_CLASS_TIMESTAMP
+from homeassistant.const import PERCENTAGE
+from homeassistant.const import STATE_UNKNOWN
 from homeassistant.helpers.dispatcher import async_dispatcher_connect
-from .const import (
-    DOMAIN,
-    TYPE_SENSOR,
-    REG_ENTITIES,
-    SIGNAL_ADD_ENTITIES,
-)
 
-from homeassistant.const import (
-    STATE_UNKNOWN,
-    DEVICE_CLASS_TIMESTAMP,
-    DEVICE_CLASS_BATTERY,
-    PERCENTAGE,
-)
+from . import async_add_ecowitt_entities
+from . import EcowittEntity
+from .const import DOMAIN
+from .const import REG_ENTITIES
+from .const import SIGNAL_ADD_ENTITIES
+from .const import TYPE_SENSOR
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -26,9 +23,14 @@ async def async_setup_entry(hass, entry, async_add_entities):
     """Add sensors if new."""
 
     def add_entities(discovery_info=None):
-        async_add_ecowitt_entities(hass, entry, EcowittSensor,
-                                   SENSOR_DOMAIN, async_add_entities,
-                                   discovery_info)
+        async_add_ecowitt_entities(
+            hass,
+            entry,
+            EcowittSensor,
+            SENSOR_DOMAIN,
+            async_add_entities,
+            discovery_info,
+        )
 
     signal = f"{SIGNAL_ADD_ENTITIES}_{SENSOR_DOMAIN}"
     async_dispatcher_connect(hass, signal, add_entities)
@@ -36,7 +38,6 @@ async def async_setup_entry(hass, entry, async_add_entities):
 
 
 class EcowittSensor(EcowittEntity):
-
     def __init__(self, hass, entry, key, name, dc, uom, icon):
         """Initialize the sensor."""
         super().__init__(hass, entry, key, name)
@@ -59,8 +60,9 @@ class EcowittSensor(EcowittEntity):
             if self._dc == DEVICE_CLASS_BATTERY and self._uom == PERCENTAGE:
                 return self._ws.last_values[self._key] * 20.0
             return self._ws.last_values[self._key]
-        _LOGGER.warning("Sensor %s not in last update, check range or battery",
-                        self._key)
+        _LOGGER.warning(
+            "Sensor %s not in last update, check range or battery", self._key
+        )
         return STATE_UNKNOWN
 
     @property

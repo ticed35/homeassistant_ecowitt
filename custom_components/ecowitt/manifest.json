@@ -4,14 +4,10 @@
   "version": "0.5",
   "config_flow": true,
   "documentation": "https://www.home-assistant.io/integrations/ecowitt",
-  "requirements": [
-    "pyecowitt==0.12"
-  ],
+  "requirements": ["pyecowitt==0.12"],
   "ssdp": [],
   "zeroconf": [],
   "homekit": {},
   "dependencies": [],
-  "codeowners": [
-    "@garbled1"
-  ]
+  "codeowners": ["@garbled1", "@PoppyPop"]
 }
