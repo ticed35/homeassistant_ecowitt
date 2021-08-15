@@ -6,8 +6,6 @@ from homeassistant import config_entries
 from homeassistant import core
 from homeassistant import exceptions
 from homeassistant.const import CONF_PORT
-from homeassistant.const import CONF_UNIT_SYSTEM_IMPERIAL
-from homeassistant.const import CONF_UNIT_SYSTEM_METRIC
 from homeassistant.core import callback
 
 from .const import CONF_UNIT_BARO
@@ -103,28 +101,28 @@ class EcowittOptionsFlowHandler(config_entries.OptionsFlow):
                     CONF_UNIT_BARO,
                     default=self.config_entry.options.get(
                         CONF_UNIT_BARO,
-                        CONF_UNIT_SYSTEM_METRIC,
+                        self.hass.config.units.name,
                     ),
                 ): vol.In(UNIT_OPTS),
                 vol.Optional(
                     CONF_UNIT_WIND,
                     default=self.config_entry.options.get(
                         CONF_UNIT_WIND,
-                        CONF_UNIT_SYSTEM_IMPERIAL,
+                        self.hass.config.units.name,
                     ),
                 ): vol.In(WIND_OPTS),
                 vol.Optional(
                     CONF_UNIT_RAIN,
                     default=self.config_entry.options.get(
                         CONF_UNIT_RAIN,
-                        CONF_UNIT_SYSTEM_IMPERIAL,
+                        self.hass.config.units.name,
                     ),
                 ): vol.In(UNIT_OPTS),
                 vol.Optional(
                     CONF_UNIT_LIGHTNING,
                     default=self.config_entry.options.get(
                         CONF_UNIT_LIGHTNING,
-                        CONF_UNIT_SYSTEM_IMPERIAL,
+                        self.hass.config.units.name,
                     ),
                 ): vol.In(UNIT_OPTS),
                 vol.Optional(

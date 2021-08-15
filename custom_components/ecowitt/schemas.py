@@ -2,8 +2,6 @@
 import homeassistant.helpers.config_validation as cv
 import voluptuous as vol
 from homeassistant.const import CONF_PORT
-from homeassistant.const import CONF_UNIT_SYSTEM_IMPERIAL
-from homeassistant.const import CONF_UNIT_SYSTEM_METRIC
 
 from .const import CONF_NAME
 from .const import CONF_UNIT_BARO
@@ -18,10 +16,10 @@ from .const import W_TYPE_HYBRID
 COMPONENT_SCHEMA = vol.Schema(
     {
         vol.Required(CONF_PORT): cv.port,
-        vol.Optional(CONF_UNIT_BARO, default=CONF_UNIT_SYSTEM_METRIC): cv.string,
-        vol.Optional(CONF_UNIT_WIND, default=CONF_UNIT_SYSTEM_IMPERIAL): cv.string,
-        vol.Optional(CONF_UNIT_RAIN, default=CONF_UNIT_SYSTEM_IMPERIAL): cv.string,
-        vol.Optional(CONF_UNIT_LIGHTNING, default=CONF_UNIT_SYSTEM_IMPERIAL): cv.string,
+        vol.Optional(CONF_UNIT_BARO): cv.string,
+        vol.Optional(CONF_UNIT_WIND): cv.string,
+        vol.Optional(CONF_UNIT_RAIN): cv.string,
+        vol.Optional(CONF_UNIT_LIGHTNING): cv.string,
         vol.Optional(CONF_UNIT_WINDCHILL, default=W_TYPE_HYBRID): cv.string,
     }
 )
