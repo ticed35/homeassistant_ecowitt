@@ -27,6 +27,7 @@ from homeassistant.const import SPEED_KILOMETERS_PER_HOUR
 from homeassistant.const import SPEED_METERS_PER_SECOND
 from homeassistant.const import SPEED_MILES_PER_HOUR
 from homeassistant.const import TEMP_CELSIUS
+from homeassistant.const import TEMP_FAHRENHEIT
 from homeassistant.const import TIME_DAYS
 from homeassistant.const import TIME_HOURS
 from homeassistant.const import TIME_MONTHS
@@ -202,6 +203,22 @@ TYPE_LEAKBATT5 = "leakbatt5"
 TYPE_LEAKBATT6 = "leakbatt6"
 TYPE_LEAKBATT7 = "leakbatt7"
 TYPE_LEAKBATT8 = "leakbatt8"
+TYPE_TF_CH1 = "tf_ch1"
+TYPE_TF_CH2 = "tf_ch2"
+TYPE_TF_CH3 = "tf_ch3"
+TYPE_TF_CH4 = "tf_ch4"
+TYPE_TF_CH5 = "tf_ch5"
+TYPE_TF_CH6 = "tf_ch6"
+TYPE_TF_CH7 = "tf_ch7"
+TYPE_TF_CH8 = "tf_ch8"
+TYPE_TF_BATT1 = "tf_batt1"
+TYPE_TF_BATT2 = "tf_batt2"
+TYPE_TF_BATT3 = "tf_batt3"
+TYPE_TF_BATT4 = "tf_batt4"
+TYPE_TF_BATT5 = "tf_batt5"
+TYPE_TF_BATT6 = "tf_batt6"
+TYPE_TF_BATT7 = "tf_batt7"
+TYPE_TF_BATT8 = "tf_batt8"
 
 S_METRIC = 1
 S_IMPERIAL = 2
@@ -1457,6 +1474,150 @@ SENSOR_TYPES = {
         PERCENTAGE,
         TYPE_SENSOR,
         DEVICE_CLASS_BATTERY,
+        "mdi:battery",
+        0,
+        None,
+    ),
+    TYPE_TF_CH1: (
+        "Soil Temperature 1",
+        TEMP_FAHRENHEIT,
+        TYPE_SENSOR,
+        DEVICE_CLASS_TEMPERATURE,
+        "mdi:thermometer",
+        0,
+        STATE_CLASS_MEASUREMENT,
+    ),
+    TYPE_TF_CH2: (
+        "Soil Temperature 2",
+        TEMP_FAHRENHEIT,
+        TYPE_SENSOR,
+        DEVICE_CLASS_TEMPERATURE,
+        "mdi:thermometer",
+        0,
+        STATE_CLASS_MEASUREMENT,
+    ),
+    TYPE_TF_CH3: (
+        "Soil Temperature 3",
+        TEMP_FAHRENHEIT,
+        TYPE_SENSOR,
+        DEVICE_CLASS_TEMPERATURE,
+        "mdi:thermometer",
+        0,
+        STATE_CLASS_MEASUREMENT,
+    ),
+    TYPE_TF_CH4: (
+        "Soil Temperature 4",
+        TEMP_FAHRENHEIT,
+        TYPE_SENSOR,
+        DEVICE_CLASS_TEMPERATURE,
+        "mdi:thermometer",
+        0,
+        STATE_CLASS_MEASUREMENT,
+    ),
+    TYPE_TF_CH5: (
+        "Soil Temperature 5",
+        TEMP_FAHRENHEIT,
+        TYPE_SENSOR,
+        DEVICE_CLASS_TEMPERATURE,
+        "mdi:thermometer",
+        0,
+        STATE_CLASS_MEASUREMENT,
+    ),
+    TYPE_TF_CH6: (
+        "Soil Temperature 6",
+        TEMP_FAHRENHEIT,
+        TYPE_SENSOR,
+        DEVICE_CLASS_TEMPERATURE,
+        "mdi:thermometer",
+        0,
+        STATE_CLASS_MEASUREMENT,
+    ),
+    TYPE_TF_CH7: (
+        "Soil Temperature 7",
+        TEMP_FAHRENHEIT,
+        TYPE_SENSOR,
+        DEVICE_CLASS_TEMPERATURE,
+        "mdi:thermometer",
+        0,
+        STATE_CLASS_MEASUREMENT,
+    ),
+    TYPE_TF_CH8: (
+        "Soil Temperature 8",
+        TEMP_FAHRENHEIT,
+        TYPE_SENSOR,
+        DEVICE_CLASS_TEMPERATURE,
+        "mdi:thermometer",
+        0,
+        STATE_CLASS_MEASUREMENT,
+    ),
+    TYPE_TF_BATT1: (
+        "Soil Temperature 1 Battery",
+        ELECTRIC_POTENTIAL_VOLT,
+        TYPE_SENSOR,
+        DEVICE_CLASS_VOLTAGE,
+        "mdi:battery",
+        0,
+        None,
+    ),
+    TYPE_TF_BATT2: (
+        "Soil Temperature 2 Battery",
+        ELECTRIC_POTENTIAL_VOLT,
+        TYPE_SENSOR,
+        DEVICE_CLASS_VOLTAGE,
+        "mdi:battery",
+        0,
+        None,
+    ),
+    TYPE_TF_BATT3: (
+        "Soil Temperature 3 Battery",
+        ELECTRIC_POTENTIAL_VOLT,
+        TYPE_SENSOR,
+        DEVICE_CLASS_VOLTAGE,
+        "mdi:battery",
+        0,
+        None,
+    ),
+    TYPE_TF_BATT4: (
+        "Soil Temperature 4 Battery",
+        ELECTRIC_POTENTIAL_VOLT,
+        TYPE_SENSOR,
+        DEVICE_CLASS_VOLTAGE,
+        "mdi:battery",
+        0,
+        None,
+    ),
+    TYPE_TF_BATT5: (
+        "Soil Temperature 5 Battery",
+        ELECTRIC_POTENTIAL_VOLT,
+        TYPE_SENSOR,
+        DEVICE_CLASS_VOLTAGE,
+        "mdi:battery",
+        0,
+        None,
+    ),
+    TYPE_TF_BATT6: (
+        "Soil Temperature 6 Battery",
+        ELECTRIC_POTENTIAL_VOLT,
+        TYPE_SENSOR,
+        DEVICE_CLASS_VOLTAGE,
+        "mdi:battery",
+        0,
+        None,
+    ),
+    TYPE_TF_BATT7: (
+        "Soil Temperature 7 Battery",
+        ELECTRIC_POTENTIAL_VOLT,
+        TYPE_SENSOR,
+        DEVICE_CLASS_VOLTAGE,
+        "mdi:battery",
+        0,
+        None,
+    ),
+    TYPE_TF_BATT8: (
+        "Soil Temperature 8 Battery",
+        ELECTRIC_POTENTIAL_VOLT,
+        TYPE_SENSOR,
+        DEVICE_CLASS_VOLTAGE,
         "mdi:battery",
         0,
         None,
